@@ -15,20 +15,22 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+//bool myfunction (Process p1, Process p2) { return (p1<p2); }
+
 // TODO: Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
 
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
-
+  //processes_.clear(); 
   vector<int> values = LinuxParser::Pids();
-  for (uint i = 0; i < values.size(); i++){
-    Process loc_proc(values[i]);
-    //loc_proc.ppp(values[i]);
-    processes_.push_back(loc_proc);
-    
+  for (const int  value: values){
+    processes_.emplace_back(value);
   }
+  std::sort (processes_.begin(), processes_.end(), [] (Process& a, Process& b) {return a<b;});
   return processes_; 
+
+
 }
 
 // TODO: Return the system's kernel identifier (string)
@@ -45,8 +47,8 @@ int System::RunningProcesses() { return LinuxParser::RunningProcesses(); }
 
 // TODO: Return the total number of processes on the system
 int System::TotalProcesses() { 
-    total_processes_ = LinuxParser::TotalProcesses();
-    return total_processes_; 
+  total_processes_ = LinuxParser::TotalProcesses();
+  return total_processes_; 
 }
 
 // TODO: Return the number of seconds since the system started running
